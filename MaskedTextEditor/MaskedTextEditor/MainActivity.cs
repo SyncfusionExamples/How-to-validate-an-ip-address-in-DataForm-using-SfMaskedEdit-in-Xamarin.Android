@@ -1,27 +1,28 @@
 ﻿using Android.App;
-using Android.Widget;
+using Android.Content;
+using Android.Graphics;
 using Android.OS;
+using AndroidX.AppCompat.App;
 using Syncfusion.Android.DataForm;
 using Syncfusion.Android.DataForm.Editors;
 using Syncfusion.Android.MaskedEdit;
-using Android.Content;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Android.Graphics;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MaskedTextEditor
 {
-    [Activity(Label = "MaskedTextEditor", MainLauncher = true, Icon = "@mipmap/icon")]
-    public class MainActivity : Activity
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
+    public class MainActivity : AppCompatActivity
     {
         SfDataForm dataForm;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
 
             dataForm = new SfDataForm(this);
             dataForm.DataObject = new ExpenseInfo();
@@ -36,7 +37,7 @@ namespace MaskedTextEditor
     public class CustomMaskEditor : DataFormEditor<SfMaskedEdit>
     {
         Context context;
-        public CustomMaskEditor(SfDataForm dataForm,Context _context) : base(dataForm)
+        public CustomMaskEditor(SfDataForm dataForm, Context _context) : base(dataForm)
         {
             context = _context;
         }
@@ -48,7 +49,7 @@ namespace MaskedTextEditor
         protected override void OnInitializeView(DataFormItem dataFormItem, SfMaskedEdit view)
         {
             view.Mask = @"000\.000\.000\.000";
-            view.Value =(string)this.DataForm.ItemManager.GetValue(dataFormItem);
+            view.Value = (string)this.DataForm.ItemManager.GetValue(dataFormItem);
         }
         protected override void OnWireEvents(SfMaskedEdit view)
         {
@@ -67,7 +68,7 @@ namespace MaskedTextEditor
         }
         protected override bool OnValidateValue(SfMaskedEdit view)
         {
-           return this.DataForm.Validate("Balance");
+            return this.DataForm.Validate("Balance");
         }
         protected override void OnCommitValue(SfMaskedEdit view)
         {
@@ -100,6 +101,7 @@ namespace MaskedTextEditor
                 RaisePropertyChanged("Balance");
             }
         }
+
         private string _ItemName = "Education";
         public string ItemName
         {
@@ -113,7 +115,6 @@ namespace MaskedTextEditor
             }
         }
 
-        [Display(AutoGenerateField = false)]
         public bool HasErrors
         {
             get
@@ -135,6 +136,4 @@ namespace MaskedTextEditor
         }
 
     }
-
 }
-
